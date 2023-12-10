@@ -12,7 +12,7 @@ class TestPlant(unittest.TestCase):
 
         # Ensure that the plant with ID 1 doesn't exist in the test database
         with app.app_context():
-            existing_plant = Plant.query.get(1)
+            existing_plant = db.session.query(Plant).get(1)
             if existing_plant:
                 db.session.delete(existing_plant)
                 db.session.commit()
@@ -20,12 +20,12 @@ class TestPlant(unittest.TestCase):
         with app.app_context():
            plant = Plant(id=1, name="Test Plant", image="test_image", price=10.00)
            db.session.add(plant)
-           db.session.commit()        
+           db.session.commit()
 
     def tearDown(self):
         # Clean up the database after each test
         with app.app_context():
-            existing_plant = Plant.query.get(1)
+            existing_plant = db.session.query(Plant).get(1)
             if existing_plant:
                 db.session.delete(existing_plant)
                 db.session.commit()
@@ -67,7 +67,7 @@ class TestPlant(unittest.TestCase):
         assert response.status_code == 201  # 201 status code for successful creation
 
         with app.app_context():
-            lo = Plant.query.filter_by(name="Live Oak").first()
+            lo = db.session.query(Plant).filter_by(name="Live Oak").first()
             assert lo
             assert lo.name == "Live Oak"
             assert lo.image == "https://www.nwf.org/-/media/NEW-WEBSITE/Shared-Folder/Wildlife/Plants-and-Fungi/plant_southern-live-oak_600x300.ashx"

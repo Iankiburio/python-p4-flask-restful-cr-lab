@@ -46,7 +46,8 @@ class Plants(Resource):
 
 class PlantByID(Resource):
     def get(self, plant_id):
-        plant = Plant.query.get(plant_id)
+        session = db.session
+        plant = session.query(Plant).get(plant_id)
         if plant:
             return {
                 'id': plant.id,
